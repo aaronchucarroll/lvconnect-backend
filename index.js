@@ -39,7 +39,15 @@ app.get('/register', function(req, res) {
 
 const jwtSecret = process.env.JWT_SECRET_KEY  // This should be in an environment variable in production
 
+const path = require('path')
 
+// Serve static files from the React frontend app
+app.use(express.static(path.join(__dirname, '../frontend/webpage')))
+
+// AFTER defining routes: Anything that doesn't match what's above, send back index.html; (the beginning slash ('/') in the string is important!)
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname + '/../frontend/webpage/index.html'))
+})
 
 app.post('/signup', async (req, res) => {
   const { username, password, groupId, bio, user_type } = req.body;
